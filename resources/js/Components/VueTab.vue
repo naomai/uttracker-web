@@ -1,26 +1,48 @@
-<script>
+<script setup>
   import {TabulatorFull as Tabulator} from 'tabulator-tables'; //import Tabulator library
+  import { ref, defineProps, onMounted, useTemplateRef } from 'vue'
 
-  export default {
-    props: {
-      endpoint: String,
-      columns: Array,
-    },
-    data() {
-      return {
-        tabulator: null, //variable to hold your table
-        tableData: [], //data for table to display
-      }
-    },
-    mounted() {
+  const props = defineProps(["endpoint", "columns", "rows"]);
+
+  const tableNode = useTemplateRef("table");
+  const tabulator = ref(null); //variable to hold your table
+  const tableData = ref([]); //data for table to display
+
+  onMounted(() => {
       //instantiate Tabulator when element is mounted
-      this.tabulator = new Tabulator(this.$refs.table, {
-        data: this.tableData, //link data to table
+      tabulator.value = new Tabulator(tableNode.value, {
+        //data: tableData.value, //link data to table
+        pagination:true, //enable pagination
+        paginationMode:"remote",
+        ajaxURL: props.endpoint,
         reactiveData: true, //enable data reactivity
-        columns: this.columns, //define table columns
+        columns: props.columns, //define table columns
+        paginationSize: props.rows,
+        paginationInitialPage: 1,
       });
-    },
-  }
+      //tabulator.value.setData();
+      
+
+        Tabulator.extendModule("format", "formatters",  {
+            mapLink: function(cell){
+                const row = cell.getRow().getData();
+                const mapName = row.mapName;
+                const url = row.mapUrl;
+                const content = '<a href=\''+url+'\'>'+mapName+'</a>';
+                return content;
+            },
+            serverLink: function(cell){
+                const row = cell.getRow().getData();
+                const serverName = row.name;
+                const url = row.serverUrl;
+                const content = '<a href=\''+url+'\'>'+serverName+'</a>';
+                return content;
+            }
+        });
+
+
+    }
+  );
 </script>
 
 <template>

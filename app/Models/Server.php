@@ -10,6 +10,8 @@ class Server extends Model
 {
     use HasFactory;
 
+    protected $hidden = ['variables'];
+
     protected function variables(): Attribute
     {
         return Attribute::make(
