@@ -25,30 +25,54 @@ class ServerController extends Controller {
         return Server::where('last_success', '>', $timeLowerBoundary);
     }
 
-    public function listPagination() {
+    public function listPagination(Request $request) {
         $servers = $this->
             getOnlineServerList()->
             select("id", "address", "name", "variables", "rating_minute", "country")->
+            where("variables", "<>", "{}")->
             orderByDesc("rating_minute");
+
+        $servers = self::applySorting($servers, $request);
+
         
+
         $serversCollection = $servers->paginate(30);
-        $serversCollection->getCollection()->transform(function($server){
+        $serversCollection->transform(function($server){
             $server->serverUrl = route(
                 "server.info", 
                 [
-                    "address"=>$server->address,
-                    "slug"=>self::getSlug($server->name)
+                    "address" => $server->address,
+                    "slug" => self::getSlug($server->name)
                 ]);
-            $server->mapUrl = route("map.info", ["name"=>$server->variables->mapname]);
-            $server->mapName = $server->variables->mapname;
+            if(property_exists($server->variables, "mapname")){
+                $server->mapUrl = route("map.info", [
+                    "name" => self::urlEncodeRouteParam($server->variables->mapname)
+                ]);
+                $server->mapName = $server->variables->mapname;
+            }
             $server->playersOnline = $server->variables->numplayers;
             $server->playersMax = $server->variables->maxplayers;
             unset($server->variables);
             return $server;
         });
         
+
+        
         return $serversCollection;
 
+    }
+
+    private static function applySorting($collection, $request) {
+        $sorters = $request->query('sort');
+        if(is_array($sorters) && count($sorters)>0){
+            $sorter = $sorters[0];
+            return $collection->reorder($sorter['field'], $sorter['dir']);
+        }
+        return $collection;
+    }
+
+    private static function urlEncodeRouteParam($paramValue) {
+        return str_replace(["{","}"], ["%7B", "%7D"], $paramValue);
     }
     
 }

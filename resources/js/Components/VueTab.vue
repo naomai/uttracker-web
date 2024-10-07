@@ -11,14 +11,18 @@
   onMounted(() => {
       //instantiate Tabulator when element is mounted
       tabulator.value = new Tabulator(tableNode.value, {
-        //data: tableData.value, //link data to table
-        pagination:true, //enable pagination
-        paginationMode:"remote",
         ajaxURL: props.endpoint,
         reactiveData: true, //enable data reactivity
         columns: props.columns, //define table columns
+        layout:"fitColumns",
+
+        sortMode:"remote", 
+
+        pagination:true, //enable pagination
+        paginationMode:"remote",
         paginationSize: props.rows,
         paginationInitialPage: 1,
+        
       });
       //tabulator.value.setData();
       
@@ -37,7 +41,15 @@
                 const url = row.serverUrl;
                 const content = '<a href=\''+url+'\'>'+serverName+'</a>';
                 return content;
-            }
+            },
+            playerCell: function(cell){
+                const row = cell.getRow().getData();
+                const playersOnline = row.playersOnline;
+                const playersMax = row.playersMax;
+                const hasFakePlayers = row.hasFakePlayers;
+                const content = `<span class='numplayers'>${playersOnline}</span> / <span class='maxplayers'>${playersMax}</span>`;
+                return content;
+            },
         });
 
 

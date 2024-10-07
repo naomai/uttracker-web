@@ -1,7 +1,57 @@
 body {
     font-family: Segoe UI,Arial,sans-serif; 
     font-size: 9pt;
-    background-color: hwb(180 18% 80%);
-    color: #ccdfdd;
+    background-color: #2b2928;
+    color: #dfd5cc;
 }
 
+a,a:visited{
+    color: #e77109; 
+    text-decoration:none;
+}
+a:hover {
+    color: #dfd5cc;
+    text-decoration:underline;
+}
+
+.tabulator {
+    border: 1px solid #3f1f06;
+    font-size: 11px;
+}
+.tabulator .tabulator-tableholder .tabulator-table {
+    background-color: #000;
+}
+
+
+.tabulator .tabulator-header {
+    background-color: #61310a;
+    color: #dfd5cc;
+    border-bottom: 2px solid #e77109;
+
+}
+
+.tabulator .tabulator-header .tabulator-col {
+    background-color: transparent;
+    border: none;
+}
+
+.tabulator .tabulator-header .tabulator-col.tabulator-sortable.tabulator-col-sorter-element:hover {
+    cursor:pointer;
+    background-color: #00000038;
+}
+
+.tabulator-row {
+    background-color: #3e2109;
+}
+
+.tabulator-row.tabulator-row-even {
+    background-color: #341b06;
+}
+
+.tabulator-row.tabulator-selectable:hover {
+    background-color: #00000038;
+}
+
+.tabulator-row .tabulator-cell {
+    border-right: 1px solid #00000038;
+}
