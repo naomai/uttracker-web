@@ -1,6 +1,7 @@
 <script setup>
   import {TabulatorFull as Tabulator} from 'tabulator-tables'; //import Tabulator library
   import { ref, defineProps, onMounted, useTemplateRef } from 'vue'
+  import emel  from 'emel'
 
   const props = defineProps(["endpoint", "columns", "rows"]);
 
@@ -30,24 +31,24 @@
         Tabulator.extendModule("format", "formatters",  {
             mapLink: function(cell){
                 const row = cell.getRow().getData();
-                const mapName = row.mapName;
-                const url = row.mapUrl;
-                const content = '<a href=\''+url+'\'>'+mapName+'</a>';
+                const content = emel("a[href=?]{?}", {
+                  placeholders: [row.mapUrl,row.mapName]
+                });
                 return content;
             },
-            serverLink: function(cell){
+            serverLink: function(cell) {
                 const row = cell.getRow().getData();
-                const serverName = row.name;
-                const url = row.serverUrl;
-                const content = '<a href=\''+url+'\'>'+serverName+'</a>';
+                const content = emel("a[href=?]{?}+div.serv_ip{?}", {
+                  placeholders: [row.serverUrl, row.name, row.address_game]
+                });
                 return content;
             },
             playerCell: function(cell){
                 const row = cell.getRow().getData();
-                const playersOnline = row.playersOnline;
-                const playersMax = row.playersMax;
+                const content = emel("span.serv_players_online{?}+{ / }+span.serv_players_max{?}", {
+                  placeholders: [row.playersOnline, row.playersMax]
+                });
                 const hasFakePlayers = row.hasFakePlayers;
-                const content = `<span class='numplayers'>${playersOnline}</span> / <span class='maxplayers'>${playersMax}</span>`;
                 return content;
             },
         });

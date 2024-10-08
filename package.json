@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "@vitejs/plugin-vue": "^5.1.4",
+        "emel": "^3.1.1",
         "tabulator-tables": "^6.3.0",
         "vue": "^3.5.10"
     }

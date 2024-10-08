@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('servers', function (Blueprint $table) {
             $table->id();
-            $table->string("address", 60)->unique();
+            $table->string("address_query", 60)->unique();
+            $table->string("address_game", 60)->unique();
             $table->string("name");
             $table->json("variables")->default("{}");
             $table->timestamp("last_check")->nullable();

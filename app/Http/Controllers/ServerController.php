@@ -20,15 +20,18 @@ class ServerController extends Controller {
         ]);
     }
 
-    private function getOnlineServerList() {
+    private function getOnlineServerList(string $gameName="ut") {
         $timeLowerBoundary = Carbon::now()->subHours(1);
-        return Server::where('last_success', '>', $timeLowerBoundary);
+        return Server::where([
+            ['last_success', '>', $timeLowerBoundary],
+            ['game_name', '=', $gameName]
+        ]);
     }
 
     public function listPagination(Request $request) {
         $servers = $this->
             getOnlineServerList()->
-            select("id", "address", "name", "variables", "rating_minute", "country")->
+            select("id", "address_game", "name", "variables", "rating_minute", "country")->
             where("variables", "<>", "{}")->
             orderByDesc("rating_minute");
 
@@ -41,7 +44,7 @@ class ServerController extends Controller {
             $server->serverUrl = route(
                 "server.info", 
                 [
-                    "address" => $server->address,
+                    "address" => $server->address_game,
                     "slug" => self::getSlug($server->name)
                 ]);
             if(property_exists($server->variables, "mapname")){

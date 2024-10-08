@@ -16,7 +16,7 @@
 </head>
 <body class="" id='ut_tracker_app'>
 	<div id='logo_container'>
-	    <h1 class='logo'><a href='/'>Unreal Tournament 99 Stats Tracker</a></h1>
+	    <h1 class='logo'><a href='/'>Server monitor</a></h1>
 	</div>
 	
 <div id='content'>
