@@ -25,20 +25,38 @@
         paginationInitialPage: 1,
         
       });
+
+      tabulator.value.on("cellClick", function(e, cell){
+        var clickTarget = null;
+        const defaultLinkCell = cell.getElement().querySelector("a.cell_default_action");
+        const defaultLinkRow = cell.getRow().getElement().querySelector("a.row_default_action");
+        if(defaultLinkCell!==null){
+          clickTarget = defaultLinkCell;
+        }else if(defaultLinkRow!==null){
+          clickTarget = defaultLinkRow;
+        }
+
+        if(clickTarget!==null){
+          //clickTarget.click();
+          e.preventDefault();
+          window.location = clickTarget.href;
+        }
+      });
+
       //tabulator.value.setData();
       
 
         Tabulator.extendModule("format", "formatters",  {
             mapLink: function(cell){
                 const row = cell.getRow().getData();
-                const content = emel("a[href=?]{?}", {
+                const content = emel("a.cell_default_action[href=?]{?}", {
                   placeholders: [row.mapUrl,row.mapName]
                 });
                 return content;
             },
             serverLink: function(cell) {
                 const row = cell.getRow().getData();
-                const content = emel("a[href=?]{?}+div.serv_ip{?}", {
+                const content = emel("a.row_default_action[href=?]{?}+div.serv_ip{?}", {
                   placeholders: [row.serverUrl, row.name, row.address_game]
                 });
                 return content;
