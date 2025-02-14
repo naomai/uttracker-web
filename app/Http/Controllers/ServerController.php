@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\HasSlug;
+use App\Http\Resources\PlayerStatResource;
+use App\Http\Resources\ServerBasicInfoResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Models\Server;
@@ -12,7 +14,6 @@ use Illuminate\Contracts\Database\Query\Builder;
 
 
 class ServerController extends Controller {
-    use HasSlug;
     
     public function showList(): View {
         return view('serverlist', [
@@ -37,32 +38,17 @@ class ServerController extends Controller {
 
         $servers = self::applySorting($servers, $request);
 
-        
-
         $serversCollection = $servers->paginate(30);
         $serversCollection->transform(function($server){
-            $server->serverUrl = route(
-                "server.info", 
-                [
-                    "address" => $server->address_game,
-                    "slug" => self::getSlug($server->name)
-                ]);
-            if(property_exists($server->variables, "mapname")){
-                $server->mapUrl = route("map.info", [
-                    "name" => self::urlEncodeRouteParam($server->variables->mapname)
-                ]);
-                $server->mapName = $server->variables->mapname;
-            }
-            $server->playersOnline = $server->variables->numplayers;
-            $server->playersMax = $server->variables->maxplayers;
-            unset($server->variables);
-            return $server;
+           return new ServerBasicInfoResource($server);
         });
-        
 
-        
         return $serversCollection;
+    }
 
+    public function showPlayerStats(Server $server) {
+        $stats = $server->playerStats()->with('player')->orderByDesc('score');
+        return PlayerStatResource::collection($stats->get());
     }
 
     private static function applySorting($collection, $request) {
@@ -74,8 +60,5 @@ class ServerController extends Controller {
         return $collection;
     }
 
-    private static function urlEncodeRouteParam($paramValue) {
-        return str_replace(["{","}"], ["%7B", "%7D"], $paramValue);
-    }
     
 }

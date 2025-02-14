@@ -7,7 +7,8 @@ use App\Models\Server;
 Route::get('/', [ServerController::class, 'showList']);
 
 Route::get('/server/{address}-{slug}', function (string $address, string $slug) {
-    return view('server.info');
+    $server = Server::where("address_game", "=", $address)->first();
+    return view('serverinfo', ['server'=>$server]);
 })
 ->where(['address' => '([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}|[a-z\-][a-z0-9\-\.]*)\:[0-9]{1,5}'])
 ->name("server.info");

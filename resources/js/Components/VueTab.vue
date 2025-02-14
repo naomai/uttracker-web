@@ -1,30 +1,44 @@
 <script setup>
   import {TabulatorFull as Tabulator} from 'tabulator-tables'; //import Tabulator library
-  import { ref, defineProps, onMounted, useTemplateRef } from 'vue'
+  import { ref, onMounted, useTemplateRef } from 'vue'
   import emel  from 'emel'
 
-  const props = defineProps(["endpoint", "columns", "rows"]);
+  const props = defineProps([
+    "endpoint", 
+    "columns", 
+    "rows",
+    "partial",
+  ]);
 
   const tableNode = useTemplateRef("table");
   const tabulator = ref(null); //variable to hold your table
   const tableData = ref([]); //data for table to display
 
   onMounted(() => {
-      //instantiate Tabulator when element is mounted
-      tabulator.value = new Tabulator(tableNode.value, {
+      let options = {
         ajaxURL: props.endpoint,
         reactiveData: true, //enable data reactivity
         columns: props.columns, //define table columns
         layout:"fitColumns",
 
-        sortMode:"remote", 
-
         pagination:true, //enable pagination
-        paginationMode:"remote",
         paginationSize: props.rows,
         paginationInitialPage: 1,
         
-      });
+      }
+
+      if(props.partial) {
+        options.sortMode = "remote";
+        options.paginationMode = "remote";
+      } else {
+        options.ajaxResponse = (url, params, response) => 
+          response.data;
+        
+        options.paginationSize = 30;
+      }
+
+
+      tabulator.value = new Tabulator(tableNode.value, options);
 
       tabulator.value.on("cellClick", function(e, cell){
         var clickTarget = null;
@@ -46,30 +60,30 @@
       //tabulator.value.setData();
       
 
-        Tabulator.extendModule("format", "formatters",  {
-            mapLink: function(cell){
-                const row = cell.getRow().getData();
-                const content = emel("a.cell_default_action[href=?]{?}", {
-                  placeholders: [row.mapUrl,row.mapName]
-                });
-                return content;
-            },
-            serverLink: function(cell) {
-                const row = cell.getRow().getData();
-                const content = emel("a.row_default_action[href=?]{?}+div.serv_ip{?}", {
-                  placeholders: [row.serverUrl, row.name, row.address_game]
-                });
-                return content;
-            },
-            playerCell: function(cell){
-                const row = cell.getRow().getData();
-                const content = emel("span.serv_players_online{?}+{ / }+span.serv_players_max{?}", {
-                  placeholders: [row.playersOnline, row.playersMax]
-                });
-                const hasFakePlayers = row.hasFakePlayers;
-                return content;
-            },
-        });
+      Tabulator.extendModule("format", "formatters",  {
+          mapLink: function(cell){
+              const row = cell.getRow().getData();
+              const content = emel("a.cell_default_action[href=?]{?}", {
+                placeholders: [row.mapUrl,row.mapName]
+              });
+              return content;
+          },
+          serverLink: (cell)=> {
+              const row = cell.getData();
+              const content = emel("a.row_default_action[href=?]{?}+div.serv_ip{?}", {
+                placeholders: [row.serverUrl, row.name, row.addressGame]
+              });
+              return content;
+          },
+          playerCell: function(cell){
+              const row = cell.getRow().getData();
+              const content = emel("span.serv_players_online{?}+{ / }+span.serv_players_max{?}", {
+                placeholders: [row.playersOnline, row.playersMax]
+              });
+              const hasFakePlayers = row.hasFakePlayers;
+              return content;
+          },
+      });
 
 
     }
