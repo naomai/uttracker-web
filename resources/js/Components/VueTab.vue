@@ -10,9 +10,9 @@
     "partial",
   ]);
 
-  const tableNode = useTemplateRef("table");
-  const tabulator = ref(null); //variable to hold your table
-  const tableData = ref([]); //data for table to display
+    const tableNode = useTemplateRef("table");
+    const tabulator = ref(null); //variable to hold your table
+    const tableData = ref([]); //data for table to display
 
   onMounted(() => {
       let options = {
@@ -40,54 +40,61 @@
 
       tabulator.value = new Tabulator(tableNode.value, options);
 
-      tabulator.value.on("cellClick", function(e, cell){
-        var clickTarget = null;
-        const defaultLinkCell = cell.getElement().querySelector("a.cell_default_action");
-        const defaultLinkRow = cell.getRow().getElement().querySelector("a.row_default_action");
-        if(defaultLinkCell!==null){
-          clickTarget = defaultLinkCell;
-        }else if(defaultLinkRow!==null){
-          clickTarget = defaultLinkRow;
-        }
+        tabulator.value.on("cellClick", function(e, cell){
+            var clickTarget = null;
+            const defaultLinkCell = cell.getElement().querySelector("a.cell_default_action");
+            const defaultLinkRow = cell.getRow().getElement().querySelector("a.row_default_action");
+            if(defaultLinkCell!==null){
+                clickTarget = defaultLinkCell;
+            }else if(defaultLinkRow!==null){
+                clickTarget = defaultLinkRow;
+            }
 
-        if(clickTarget!==null){
-          //clickTarget.click();
-          e.preventDefault();
-          window.location = clickTarget.href;
-        }
-      });
+            if(clickTarget!==null){
+                //clickTarget.click();
+                e.preventDefault();
+                window.location = clickTarget.href;
+            }
+        });
 
-      //tabulator.value.setData();
-      
+        //tabulator.value.setData();
+    
 
-      Tabulator.extendModule("format", "formatters",  {
-          mapLink: function(cell){
-              const row = cell.getRow().getData();
-              const content = emel("a.cell_default_action[href=?]{?}", {
-                placeholders: [row.mapUrl,row.mapName]
-              });
-              return content;
-          },
-          serverLink: (cell)=> {
-              const row = cell.getData();
-              const content = emel("a.row_default_action[href=?]{?}+div.serv_ip{?}", {
-                placeholders: [row.serverUrl, row.name, row.addressGame]
-              });
-              return content;
-          },
-          playerCell: function(cell){
-              const row = cell.getRow().getData();
-              const content = emel("span.serv_players_online{?}+{ / }+span.serv_players_max{?}", {
-                placeholders: [row.playersOnline, row.playersMax]
-              });
-              const hasFakePlayers = row.hasFakePlayers;
-              return content;
-          },
-      });
+        Tabulator.extendModule("format", "formatters",  {
+            mapLink: function(cell) {
+                const row = cell.getRow().getData();
+                const content = emel("a.cell_default_action[href=?]{?}", {
+                    placeholders: [row.mapUrl,row.mapName]
+                });
+                return content;
+            },
+            serverLink: function(cell) {
+                const row = cell.getRow().getData();
+                const content = emel("a.row_default_action[href=?]{?}+div.serv_ip{?}", {
+                    placeholders: [row.serverUrl, row.name, row.address_game]
+                });
+                return content;
+            },
+            playerCell: function(cell) {
+                const row = cell.getRow().getData();
+                const occupancyFull = parseInt(row.playersOnline) >= parseInt(row.playersMax);
+                const occupancyClass = occupancyFull ? "serv_players_full" : "serv_players_openslots";
 
-
-    }
-  );
+                const content = emel("div.?>span.serv_players_online{?}+{ / }+span.serv_players_max{?}^^", {
+                    placeholders: [occupancyClass, row.playersOnline, row.playersMax]
+                });
+                const hasFakePlayers = row.hasFakePlayers;
+                return content;
+            },
+            serverGamemode: function(cell){
+                const row = cell.getRow().getData();
+                const content = emel("{?}", {
+                    placeholders: [row.gamemodeTags.mode]
+                });
+                return content;
+            }
+        });
+    });
 </script>
 
 <template>

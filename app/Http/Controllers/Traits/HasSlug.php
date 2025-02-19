@@ -19,4 +19,4 @@ trait HasSlug {
         }
         return $res;
     }
-}
+} 

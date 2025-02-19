@@ -5,6 +5,11 @@ body {
     color: #dfd5cc;
 }
 
+#content {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
 a,a:visited{
     color: #e77109; 
     text-decoration:none;
@@ -41,11 +46,11 @@ a:hover {
 }
 
 .tabulator-row {
-    background-color: #3e2109;
+    background-color: #261303;
 }
 
 .tabulator-row.tabulator-row-even {
-    background-color: #341b06;
+    background-color: #1d0d01;
 }
 
 .tabulator-row.tabulator-selectable:hover {
@@ -64,4 +69,11 @@ a:hover {
     font-size: 0.8em;
     opacity: 0.8;
     font-style: italic;
+}
+
+.serv_players_openslots {
+    color: #1a932e;
+}
+.serv_players_full {
+    color: #760909;
 }
