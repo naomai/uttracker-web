@@ -33,6 +33,7 @@ class ServerBasicInfoResource extends JsonResource {
         $server['name'] = $this->name;
         $server['addressGame'] = $this->address_game;
         $server['ratingMinute'] = $this->rating_minute;
+        $server['gamemodeTags'] = $this->getGamemodeInfo();
 
         return $server;
 

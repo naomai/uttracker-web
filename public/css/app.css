@@ -1,79 +1,8 @@
-body {
-    font-family: Segoe UI,Arial,sans-serif; 
-    font-size: 9pt;
-    background-color: #2b2928;
-    color: #dfd5cc;
-}
 
-#content {
-    max-width: 960px;
-    margin: 0 auto;
-}
-
-a,a:visited{
-    color: #e77109; 
-    text-decoration:none;
-}
-a:hover {
-    color: #dfd5cc;
-    text-decoration:underline;
-}
-
-.tabulator {
-    border: 1px solid #3f1f06;
-    font-size: 11px;
-}
-.tabulator .tabulator-tableholder .tabulator-table {
-    background-color: #000;
-}
-
-
-.tabulator .tabulator-header {
-    background-color: #61310a;
-    color: #dfd5cc;
-    border-bottom: 2px solid #e77109;
-
-}
-
-.tabulator .tabulator-header .tabulator-col {
-    background-color: transparent;
-    border: none;
-}
-
-.tabulator .tabulator-header .tabulator-col.tabulator-sortable.tabulator-col-sorter-element:hover {
-    cursor:pointer;
-    background-color: #00000038;
-}
-
-.tabulator-row {
-    background-color: #261303;
-}
-
-.tabulator-row.tabulator-row-even {
-    background-color: #1d0d01;
-}
-
-.tabulator-row.tabulator-selectable:hover {
-    background-color: #00000038;
-}
-
-.tabulator-row .tabulator-cell {
-    border-right: 1px solid #00000038;
-}
-
-.tabulator .tabulator-tableholder .tabulator-table {
-    color: #dfd5cc;
-}
-
-.serv_ip{
-    font-size: 0.8em;
-    opacity: 0.8;
-    font-style: italic;
-}
-
-.serv_players_openslots {
-    color: #1a932e;
-}
-.serv_players_full {
-    color: #760909;
+#logo_container {
+    background-image: url("../assets/ginger.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 252px;
+    mix-blend-mode: screen;
 }

@@ -17,14 +17,15 @@ class ServerController extends Controller {
     
     public function showList(): View {
         return view(
-            'serverlist', [
+            'servers.listview', [
                 'servers' => $this->getOnlineServerList()->get()
             ]
         );
     }
 
     private function getOnlineServerList(string $gameName="ut") {
-        $timeLowerBoundary = Carbon::now()->subHours(1);
+        //$timeLowerBoundary = Carbon::now()->subHours(1);
+        $timeLowerBoundary = Carbon::now()->subDays(30);
         return Server::where(
             [
                 ['last_success', '>', $timeLowerBoundary],

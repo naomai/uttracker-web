@@ -9,10 +9,10 @@
 <meta name='description' content="" />
 <link rel="shortcut icon" type='image/png' href='{{asset('assets/uttfavRemixed.png')}}' />
 @stack("script-defs")
+@routes
 @vite(['resources/sass/app.scss'])
 @vite(['resources/js/app.js'])
 <link rel='stylesheet' href='{{asset('css/app.css')}}'/>
-
 </head>
 <body class="" id='ut_tracker_app'>
 	<div id='logo_container'>

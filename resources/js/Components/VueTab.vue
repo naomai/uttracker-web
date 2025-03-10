@@ -71,7 +71,7 @@
             serverLink: function(cell) {
                 const row = cell.getRow().getData();
                 const content = emel("a.row_default_action[href=?]{?}+div.serv_ip{?}", {
-                    placeholders: [row.serverUrl, row.name, row.address_game]
+                    placeholders: [row.serverUrl, row.name, row.addressGame]
                 });
                 return content;
             },
@@ -88,9 +88,16 @@
             },
             serverGamemode: function(cell){
                 const row = cell.getRow().getData();
-                const content = emel("{?}", {
-                    placeholders: [row.gamemodeTags.mode]
+
+                const content = emel("img.gamemode-tag[src={?}]", {
+                    placeholders: ["assets/bitmaps/gm-" + row.gamemodeTags.mode.toLowerCase() + ".png"]
                 });
+
+                if(row.gamemodeTags.style != "") {
+                  content.appendChild(emel("img.gamemode-tag[src={?}]", {
+                    placeholders: ["assets/bitmaps/gm-" + row.gamemodeTags.style.toLowerCase() + ".png"]
+                  }));
+                }
                 return content;
             }
         });

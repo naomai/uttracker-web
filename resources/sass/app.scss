@@ -8,3 +8,146 @@
 @import 'bootstrap/scss/bootstrap';
  
 @import "tabulator-tables/dist/css/tabulator.css";
+
+* {
+    --app-motif: #f84f34;
+    --table-bar-bg: oklch(from var(--app-motif) l c h);
+    --table-bar-text: oklch(from var(--app-motif) calc(l * 0.3) calc(c * 0.4) h);
+    
+    --table-row-odd-bg: oklch(from var(--app-motif) calc(l * 0.3) calc(c * 0.2) h);
+    --table-row-even-bg: oklch(from var(--app-motif) calc(l * 0.2) calc(c * 0.2) h);
+}
+
+body {
+    font-family: Segoe UI,Arial,sans-serif; 
+    font-size: 9pt;
+    background-color: #2b2928;
+    color: #dfd5cc;
+}
+
+#content, #logo_container {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+
+#logo_container  a {
+    opacity: 0.01;
+    margin: 0;
+    display: block;
+    width: 960px;
+    height: 252px;
+}
+
+#serverlist_gamemode_filter {
+    margin: 0.5em 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2em;
+
+    .filter_mode {
+        padding: 0.4em 0;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 4px;
+
+        img {
+            image-rendering: pixelated;
+            height: 16px;
+        }
+    
+        
+        &.selectable, &.notselected {
+            border-color: #FFF3;
+            background: #FFF1;
+        }
+
+        &.selected {
+            border-color: var(--table-bar-bg);
+            background-color: var(--table-bar-bg);
+
+            img {
+                filter: drop-shadow(0px 10000px var(--table-bar-text));
+                transform: translateY(-10000px);
+            }
+        }
+    }
+    
+}
+
+a,a:visited{
+    color: var(--app-motif); 
+    text-decoration:none;
+}
+a:hover {
+    color: #dfd5cc;
+    text-decoration:underline;
+}
+
+.tabulator .gamemode-tag{
+    display: block;
+    padding: 0.2em;
+}
+
+/* TABULATOR */
+
+.tabulator {
+    // border: 1px solid #3f1f06 !important;
+    border: none !important;
+    font-size: 11px;
+}
+.tabulator .tabulator-tableholder .tabulator-table {
+    background-color: #000;
+}
+
+
+.tabulator .tabulator-header {
+    background-color: var(--table-bar-bg);
+    color: var(--table-bar-text);
+    border-bottom: 2px solid var(--table-bar-text); 
+    font-size: 1.2em;
+
+}
+
+.tabulator .tabulator-header .tabulator-col {
+    background-color: transparent;
+    border: none;
+}
+
+.tabulator .tabulator-header .tabulator-col.tabulator-sortable.tabulator-col-sorter-element:hover {
+    cursor:pointer;
+    background-color: #00000038;
+}
+
+.tabulator-row {
+    background-color: var(--table-row-odd-bg);
+}
+
+.tabulator-row.tabulator-row-even {
+    background-color: var(--table-row-even-bg);
+}
+
+.tabulator-row.tabulator-selectable:hover {
+    background-color: #00000038;
+}
+
+.tabulator-row .tabulator-cell {
+    border-right: 1px solid #00000038;
+}
+
+.tabulator .tabulator-tableholder .tabulator-table {
+    color: #dfd5cc;
+}
+
+.serv_ip{
+    font-size: 0.8em;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+.serv_players_openslots {
+    color: #1a932e;
+}
+.serv_players_full {
+    color: #760909;
+}
